@@ -10,7 +10,7 @@ using WebStore.Interfaces.Api;
 
 namespace WebStore.Clients.Values
 {
-    class ValuesClient:BaseClient, IValuesService
+    public class ValuesClient:BaseClient, IValuesService
     {
         public ValuesClient(IConfiguration Configuration) : base(Configuration, "api/values")
         {
