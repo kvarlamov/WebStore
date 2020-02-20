@@ -6,22 +6,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebStore.ServiceHosting.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("api/values")]
+
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Enumerable.Range(1, 50).Select(i => $"Value {i}").ToArray();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            return "value";
+            return $"value {id}";
         }
 
         // POST api/values
