@@ -34,7 +34,8 @@ namespace WebStore.Services.Product
                 throw new ArgumentNullException(nameof(Employee));
 
             var db_employee = GetById(id);
-            if(db_employee is null) return;
+            if (db_employee is null)
+                throw new InvalidOperationException($"Employee with id {id} didn't find");
 
             db_employee.FirstName = Employee.FirstName;
             db_employee.SecondName = Employee.SecondName;
