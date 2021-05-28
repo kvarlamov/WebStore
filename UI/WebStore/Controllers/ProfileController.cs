@@ -13,15 +13,15 @@ namespace WebStore.Controllers
         {
             return View();
         }
-        public IActionResult Orders([FromServices] IOrderService OrderService)
+        public IActionResult Orders([FromServices] IOrderService orderService)
         {
-            return View(OrderService
+            return View(orderService
                 .GetUserOrders(User.Identity.Name)
                 .Select(order => new UserOrderViewModel
                 {
                     Id = order.Id,
                     Name = order.Name,
-                    Address = order.Address,
+                    Address = order.Adress,
                     Phone = order.Phone,
                     TotalSum = order.OrderItems.Sum(item => item.Price * item.Quantity)
                 }));
