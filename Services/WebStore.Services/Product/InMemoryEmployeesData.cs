@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using WebStore.Interfaces.Services;
 using WebStore.Domain.ViewModels;
 
@@ -8,6 +9,8 @@ namespace WebStore.Services.Product
 {
     public class InMemoryEmployeesData : IEmployeesData
     {
+        private readonly ILogger<InMemoryEmployeesData> _Logger;
+
         private readonly List<EmployeeView> _Employees = new List<EmployeeView>
         {
             new EmployeeView { Id = 1, SecondName = "Иванов", FirstName = "Иван", Patronymic = "Иванович", Age = 35 },
@@ -15,17 +18,29 @@ namespace WebStore.Services.Product
             new EmployeeView { Id = 3, SecondName = "Сидоров", FirstName = "Сидор", Patronymic = "Сидорович", Age = 18 },
         };
 
+        public InMemoryEmployeesData(ILogger<InMemoryEmployeesData> logger)
+        {
+            _Logger = logger;
+        }
+
         public IEnumerable<EmployeeView> GetAll() => _Employees;
 
         public EmployeeView GetById(int id) => _Employees.FirstOrDefault(e => e.Id == id);
 
-        public void Add(EmployeeView Employee)
+        public void Add(EmployeeView employee)
         {
-            if(Employee is null)
-                throw new ArgumentNullException(nameof(Employee));
+            if(employee is null)
+                throw new ArgumentNullException(nameof(employee));
 
-            Employee.Id = _Employees.Count == 0 ? 1 : _Employees.Max(e => e.Id) + 1;
-            _Employees.Add(Employee);
+            if (_Employees.Contains(employee) || _Employees.Any(e => e.Id == employee.Id))
+            {
+                _Logger.LogWarning("Attemp to add employee that already exist with id " + employee.Id);
+                return;
+            }
+            
+            employee.Id = _Employees.Count == 0 ? 1 : _Employees.Max(e => e.Id) + 1;
+            _Employees.Add(employee);
+            _Logger.LogInformation($"employee {employee.FirstName} with id={employee.Id} succesfully added");
         }
 
         public void Edit(int id, EmployeeView Employee)

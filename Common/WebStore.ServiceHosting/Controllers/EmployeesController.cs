@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Services;
 
@@ -11,9 +12,22 @@ namespace WebStore.ServiceHosting.Controllers
     public class EmployeesController : ControllerBase, IEmployeesData
     {
         private IEmployeesData _employeesData;
-        public EmployeesController(IEmployeesData employeesData) => _employeesData = employeesData;
+        private readonly ILogger<EmployeesController> _Logger;
+
+        public EmployeesController(IEmployeesData employeesData, ILogger<EmployeesController> logger)
+        {
+            _employeesData = employeesData;
+            _Logger = logger;
+        }
+
         [HttpPost, ActionName("Post")]
-        public void Add(EmployeeView Employee) => _employeesData.Add(Employee);
+        public void Add(EmployeeView employee)
+        {
+            using (_Logger.BeginScope($"Adding new employee {employee.FirstName}"))
+            {
+                _employeesData.Add(employee);
+            }
+        }
 
         [HttpDelete("{id}")]
         public bool Delete(int id) => _employeesData.Delete(id);
