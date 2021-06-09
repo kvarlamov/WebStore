@@ -3,6 +3,7 @@ using System.Linq;
 using WebStore.Domain.Entities;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Map;
 
 namespace WebStore.Controllers
 {
@@ -24,19 +25,7 @@ namespace WebStore.Controllers
                 SectionId = SectionId,
                 BrandId = BrandId,
                 Products = products
-                .Select(p => new Product
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Order = p.Order,
-                    ImageUrl = p.ImageUrl,
-                    BrandId = p.Brand?.Id,
-                    Brand = p.Brand is null? null : new Brand
-                    {
-                        Id = p.Brand.Id,
-                        Name = p.Brand.Name
-                    }
-                })
+                .Select(p => p.FromDto())
                 .Select(p => new ProductViewModel
                 {
                     Id = p.Id,
