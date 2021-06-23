@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using WebStore.DAL.Context;
@@ -18,9 +20,12 @@ namespace WebStore.ServiceHosting.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserStore<User> _UserStore;
-        public UsersController(WebStoreContext db)
+        private readonly ILogger<UsersController> _Logger;
+
+        public UsersController(WebStoreContext db, ILogger<UsersController> logger)
         {
             _UserStore = new UserStore<User>(db) { AutoSaveChanges = true };
+            _Logger = logger;
         }
 
         #region Users
@@ -50,13 +55,36 @@ namespace WebStore.ServiceHosting.Controllers
 
         [HttpPost("NormalUserName/{name}")]
         public async Task SetNormalizedUserNameAsync([FromBody] User user, string name)
-        {
+        {            
             await _UserStore.SetNormalizedUserNameAsync(user, name);
             await _UserStore.UpdateAsync(user);
         }
 
         [HttpPost("User")]
-        public async Task<bool> CreateAsync([FromBody] User user) => (await _UserStore.CreateAsync(user)).Succeeded;
+        public async Task<bool> CreateAsync([FromBody] User user)
+        {
+            if (user is null)
+            {
+                _Logger.LogError("null object in argument when new user was creating");
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            var creationResult = await _UserStore.CreateAsync(user);
+
+            using (_Logger.BeginScope("Creation of new user {0}", user.UserName))
+            {
+                if (creationResult.Succeeded)
+                {
+                    _Logger.LogInformation("User {0} was created", user.UserName);
+                }
+                else
+                {
+                    _Logger.LogWarning("Problem when user {0} was creating, errors: {1}", user.UserName, string.Join(", ", creationResult.Errors.Select(e => e.Description)));
+                }
+            }
+
+            return creationResult.Succeeded;
+        }
 
         [HttpPut("User")]
         public async Task<bool> UpdateAsync([FromBody] User user) => (await _UserStore.UpdateAsync(user)).Succeeded;
