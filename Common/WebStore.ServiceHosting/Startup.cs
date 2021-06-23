@@ -30,13 +30,14 @@ namespace WebStore.ServiceHosting
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<WebStoreContextInitializer>();
+            //services.AddTransient<WebStoreContextInitializer>();
 
             services.AddSwaggerGen(
                 opt =>
                 {
                     opt.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "WebStore.API", Version = "v1" });
-                    //opt.IncludeXmlComments("WebStore.ServiceHosting.xml");
+                    opt.IncludeXmlComments("WebStore.ServiceHosting.xml");
+                    opt.IncludeXmlComments(@"C:\IT\Practice\WebStore\Common\WebStore.ServiceHosting\bin\Debug\netcoreapp2.2\WebStore.Domain.xml");
                 });
 
             services.AddDbContext<WebStoreContext>(opt =>
@@ -55,9 +56,9 @@ namespace WebStore.ServiceHosting
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env/*, WebStoreContextInitializer db*/)
         {
-            db.InitializeAsync().Wait();
+            //db.InitializeAsync().Wait();
 
             if (env.IsDevelopment())
             {

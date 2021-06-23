@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebStore.ServiceHosting</name>
+    </assembly>
+    <members>
+        <member name="T:WebStore.ServiceHosting.Controllers.ProductsController">
+            <summary>
+            controller of products
+            </summary>
+        </member>
+        <member name="M:WebStore.ServiceHosting.Controllers.ProductsController.GetBrands">
+            <summary>
+            get all brands
+            </summary>
+            <returns>return list of brands</returns>
+        </member>
+        <member name="M:WebStore.ServiceHosting.Controllers.ProductsController.GetProductById(System.Int32)">
+            <summary>
+            get product info by id
+            </summary>
+            <param name="id">id of product</param>
+            <returns>product by id</returns>
+        </member>
+        <member name="M:WebStore.ServiceHosting.Controllers.ProductsController.GetProducts(WebStore.Domain.Entities.ProductFilter)">
+            <summary>
+            selection products by filter
+            </summary>
+            <param name="Filter">criteria of products find</param>
+            <returns>List of products with filtration</returns>
+        </member>
+        <member name="M:WebStore.ServiceHosting.Controllers.ProductsController.GetSections">
+            <summary>
+            get all sections
+            </summary>
+            <returns>return list of sections</returns>
+        </member>
+        <member name="M:WebStore.ServiceHosting.Controllers.RolesController.GetAllRoles">
+            <summary>Получение всех пользователей системы</summary>
+            <returns>Перечисление пользователей, зарегистрированных в системе</returns>
+        </member>
+    </members>
+</doc>
