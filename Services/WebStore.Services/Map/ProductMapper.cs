@@ -25,7 +25,7 @@ namespace WebStore.Services.Map
                 ImageUrl = product.ImageUrl,
                 Price = product.Price,
                 Order = product.Order,
-                BrandId = product?.Brand.Id,
+                BrandId = product.Brand?.Id,
                 Brand = product.Brand.FromDto()
             };
     }

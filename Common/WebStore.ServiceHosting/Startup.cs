@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using WebStore.DAL.Context;
 using WebStore.Domain.Entities.Identity;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Database;
 using WebStore.Services.Product;
 
 namespace WebStore.ServiceHosting
@@ -29,6 +30,8 @@ namespace WebStore.ServiceHosting
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<WebStoreContextInitializer>();
+
             services.AddSwaggerGen(
                 opt =>
                 {
@@ -52,8 +55,10 @@ namespace WebStore.ServiceHosting
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db)
         {
+            db.InitializeAsync().Wait();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

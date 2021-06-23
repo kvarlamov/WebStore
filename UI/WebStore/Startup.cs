@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebStore.Clients.Employees;
+using WebStore.Clients.Identity;
 using WebStore.Clients.Orders;
 using WebStore.Clients.Products;
 using WebStore.Clients.Values;
@@ -26,10 +27,6 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<WebStoreContext>(opt =>
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddTransient<WebStoreContextInitializer>();            
-
             services.AddScoped<IValuesService, ValuesClient>();
 
             services.AddSingleton<IEmployeesData, EmployeesClient>(); 
@@ -38,28 +35,24 @@ namespace WebStore
             services.AddScoped<ICartService, CookieCartService>();
             services.AddScoped<IOrderService, OrdersClient>();
 
+            services.AddIdentity<User, IdentityRole>()
+                .AddDefaultTokenProviders();
 
-            services.AddIdentity<User, Role>()
-               .AddEntityFrameworkStores<WebStoreContext>()
-               .AddDefaultTokenProviders();
+            #region Custom Identity implementation
 
-            services.Configure<IdentityOptions>(
-                opt =>
-                {
-                    opt.Password.RequiredLength = 3;
-                    opt.Password.RequireDigit = false;
-                    opt.Password.RequireUppercase = false;
-                    opt.Password.RequireLowercase = false;
-                    opt.Password.RequireNonAlphanumeric = false;
-                    opt.Password.RequiredUniqueChars = 3;
+            services.AddTransient<IUserStore<User>, UsersClient>();
+            services.AddTransient<IUserRoleStore<User>, UsersClient>();
+            services.AddTransient<IUserPasswordStore<User>, UsersClient>();
+            services.AddTransient<IUserEmailStore<User>, UsersClient>();
+            services.AddTransient<IUserPhoneNumberStore<User>, UsersClient>();
+            services.AddTransient<IUserClaimStore<User>, UsersClient>();
+            services.AddTransient<IUserTwoFactorStore<User>, UsersClient>();
+            services.AddTransient<IUserLockoutStore<User>, UsersClient>();
+            services.AddTransient<IUserLoginStore<User>, UsersClient>();
 
-                    opt.Lockout.AllowedForNewUsers = true;
-                    opt.Lockout.MaxFailedAccessAttempts = 10;
-                    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+            services.AddTransient<IRoleStore<Role>, RolesClient>();
 
-                    //opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABC123";
-                    opt.User.RequireUniqueEmail = false; // Грабли - на этапе отладки при попытке регистрации двух пользователей без email
-                });
+            #endregion
 
             services.ConfigureApplicationCookie(opt =>
             {
@@ -81,10 +74,8 @@ namespace WebStore
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WebStoreContextInitializer db)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            db.InitializeAsync().Wait();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
