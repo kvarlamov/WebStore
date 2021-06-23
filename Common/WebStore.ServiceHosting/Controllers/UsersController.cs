@@ -13,6 +13,7 @@ using WebStore.Domain.Entities.Identity;
 namespace WebStore.ServiceHosting.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class UsersController : ControllerBase
     {
