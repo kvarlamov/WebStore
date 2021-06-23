@@ -39,9 +39,10 @@ namespace WebStore.ServiceHosting
             services.AddDbContext<WebStoreContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, Role>()
-               .AddEntityFrameworkStores<WebStoreContext>()
-               .AddDefaultTokenProviders();
+            services.AddIdentity<User, IdentityRole>(options =>
+            {
+                //here you can configure cookies
+            });
 
             services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             services.AddScoped<IProductData, SqlProductData>();
