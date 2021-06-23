@@ -29,6 +29,13 @@ namespace WebStore.ServiceHosting
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(
+                opt =>
+                {
+                    opt.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "WebStore.API", Version = "v1" });
+                    //opt.IncludeXmlComments("WebStore.ServiceHosting.xml");
+                });
+
             services.AddDbContext<WebStoreContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -50,6 +57,14 @@ namespace WebStore.ServiceHosting
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(
+                opt =>
+                {
+                    opt.SwaggerEndpoint("/swagger/v1/swagger.json", "WebStore.API");
+                    opt.RoutePrefix = string.Empty;
+                });
 
             app.UseMvc();
         }
