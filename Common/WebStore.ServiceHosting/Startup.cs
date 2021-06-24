@@ -16,6 +16,7 @@ using WebStore.Domain.Entities.Identity;
 using WebStore.Interfaces.Services;
 using WebStore.Services.Database;
 using WebStore.Services.Product;
+using WebStore.Logging;
 
 namespace WebStore.ServiceHosting
 {
@@ -56,8 +57,10 @@ namespace WebStore.ServiceHosting
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env/*, WebStoreContextInitializer db*/)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory log/*, WebStoreContextInitializer db*/)
         {
+            log.AddLog4Net();
+
             //db.InitializeAsync().Wait();
 
             if (env.IsDevelopment())

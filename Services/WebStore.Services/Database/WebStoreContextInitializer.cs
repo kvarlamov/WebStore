@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,12 +14,14 @@ namespace WebStore.Services.Database
         private readonly WebStoreContext _db;
         private readonly UserManager<User> _UserManager;
         private readonly RoleManager<Role> _RoleManager;
+        private readonly ILogger<WebStoreContextInitializer> _Log;
 
-        public WebStoreContextInitializer(WebStoreContext db, UserManager<User> UserManager, RoleManager<Role> RoleManager)
+        public WebStoreContextInitializer(WebStoreContext db, UserManager<User> UserManager, RoleManager<Role> RoleManager, ILogger<WebStoreContextInitializer> log)
         {
             _db = db;
             _UserManager = UserManager;
             _RoleManager = RoleManager;
+            _Log = log;
         }
 
         public async Task InitializeAsync()
@@ -74,12 +77,23 @@ namespace WebStore.Services.Database
         {
             if(!await _RoleManager.RoleExistsAsync(Role.Administrator))
             {
-                await _RoleManager.CreateAsync(new Role { Name = Role.Administrator });
+                _Log.LogInformation("Can't find role in database");
+                var result = await _RoleManager.CreateAsync(new Role { Name = Role.Administrator });
+
+                if (result.Succeeded)
+                    _Log.LogInformation("Admin Role was added succesfully");
+                else
+                    _Log.LogError("Error when adding admin role {0}", string.Join(", ", result.Errors.Select(e => e.Description)));
             }
 
             if (!await _RoleManager.RoleExistsAsync(Role.User))
             {
-                await _RoleManager.CreateAsync(new Role { Name = Role.User });
+                var result = await _RoleManager.CreateAsync(new Role { Name = Role.User });
+
+                if (result.Succeeded)
+                    _Log.LogInformation("User Role was added succesfully");
+                else
+                    _Log.LogError("Error when adding user role {0}", string.Join(", ", result.Errors.Select(e => e.Description)));
             }
 
             if(await _UserManager.FindByNameAsync(User.Administrator) is null)

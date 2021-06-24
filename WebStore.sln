@@ -24,7 +24,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.Interfaces", "Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.Services", "Services\WebStore.Services\WebStore.Services.csproj", "{90DE8732-CF44-4640-9CE2-27BA850ED037}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore.Clients", "Services\WebStore.Clients\WebStore.Clients.csproj", "{4B968270-7B55-493A-8DFB-2257096F8AB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.Clients", "Services\WebStore.Clients\WebStore.Clients.csproj", "{4B968270-7B55-493A-8DFB-2257096F8AB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore.Logging", "Common\WebStore.Logging\WebStore.Logging.csproj", "{E683F01E-D78A-47F7-ADF3-3645E0B06CC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +62,10 @@ Global
 		{4B968270-7B55-493A-8DFB-2257096F8AB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B968270-7B55-493A-8DFB-2257096F8AB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B968270-7B55-493A-8DFB-2257096F8AB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E683F01E-D78A-47F7-ADF3-3645E0B06CC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E683F01E-D78A-47F7-ADF3-3645E0B06CC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E683F01E-D78A-47F7-ADF3-3645E0B06CC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E683F01E-D78A-47F7-ADF3-3645E0B06CC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{B42976B8-8513-44BF-96DB-0324657CC519} = {F526B582-BA90-4D8A-B005-40A93BF1337C}
 		{90DE8732-CF44-4640-9CE2-27BA850ED037} = {F526B582-BA90-4D8A-B005-40A93BF1337C}
 		{4B968270-7B55-493A-8DFB-2257096F8AB4} = {F526B582-BA90-4D8A-B005-40A93BF1337C}
+		{E683F01E-D78A-47F7-ADF3-3645E0B06CC0} = {79E367E4-2470-4F5C-AE1E-12C38EE7AACD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3A6C9DB8-DE38-4174-9E92-AA00B4FD34ED}
