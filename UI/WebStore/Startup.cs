@@ -15,6 +15,7 @@ using WebStore.Interfaces.Services;
 using WebStore.Services.Product;
 using WebStore.Logging;
 using Microsoft.Extensions.Logging;
+using WebStore.Infrastructure.Middleware;
 
 namespace WebStore
 {
@@ -88,6 +89,10 @@ namespace WebStore
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            //app.UseMiddleware(typeof(ErrorHandlingMiddleware)); alternative way to register middleware
+            //app.UseMiddleware(new ErrorHandlingMiddleware(...)) alternative way to register middleware
 
             app.UseSession();
 

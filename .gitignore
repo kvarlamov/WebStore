@@ -343,3 +343,5 @@ healthchecksdb
 /WebStore/wwwroot/js/site.min.js.map
 /WebStore/wwwroot/js/site.min.js.gz
 /WebStore/wwwroot/js/site.min.js
+
+Logs/
