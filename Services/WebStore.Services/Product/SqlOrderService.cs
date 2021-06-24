@@ -10,6 +10,7 @@ using WebStore.Interfaces.Services;
 using WebStore.Domain.ViewModels;
 using WebStore.Domain.Dto.Order;
 using WebStore.Services.Map;
+using Microsoft.Extensions.Logging;
 
 namespace WebStore.Services.Product
 {
@@ -17,11 +18,13 @@ namespace WebStore.Services.Product
     {
         private readonly WebStoreContext _db;
         private readonly UserManager<User> _userManager;
+        private readonly Logger<SqlOrderService> _Logger;
 
-        public SqlOrderService(WebStoreContext db, UserManager<User> UserManager)
+        public SqlOrderService(WebStoreContext db, UserManager<User> UserManager, Logger<SqlOrderService> logger)
         {
             _db = db;
             _userManager = UserManager;
+            _Logger = logger;
         }
         
         public IEnumerable<OrderDto> GetUserOrders(string UserName)
