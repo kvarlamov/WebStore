@@ -12,6 +12,11 @@ namespace WebStore
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                //.ConfigureLogging(
+                //(host, log) =>
+                //{
+                //    //log.ClearProviders();
+                //})
                 .UseStartup<Startup>();
     }
 }
