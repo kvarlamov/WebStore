@@ -32,7 +32,8 @@ namespace WebStore
             services.AddSingleton<IEmployeesData, EmployeesClient>(); 
             //services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             services.AddScoped<IProductData, ProductsClient>();
-            services.AddScoped<ICartService, CookieCartService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<ICartStore, CookiesCartStore>();
             services.AddScoped<IOrderService, OrdersClient>();
 
             services.AddIdentity<User, IdentityRole>()

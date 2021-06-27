@@ -16,9 +16,26 @@ namespace WebStore.Services.Product
         private readonly IProductData _productData;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        private Cart Cart 
+
+        private void ReplaceCookie(IResponseCookies cookies, string cookie)
         {
-            get 
+            cookies.Delete(_cartName);
+            cookies.Append(_cartName, cookie, new CookieOptions { Expires = DateTime.Now.AddDays(15) });
+        }
+
+        public CookieCartService(IProductData productData, IHttpContextAccessor httpContextAccessor)
+        {
+            _productData = productData;
+            _httpContextAccessor = httpContextAccessor;
+
+            var user = httpContextAccessor.HttpContext.User;
+            var user_name = user.Identity.IsAuthenticated ? user.Identity.Name : null;
+            _cartName = $"cart[{user_name}]";
+        }
+
+        private Cart Cart
+        {
+            get
             {
                 var context = _httpContextAccessor.HttpContext;
                 var cookies = context.Response.Cookies;
@@ -33,26 +50,10 @@ namespace WebStore.Services.Product
                 ReplaceCookie(cookies, cart_cookie);
                 return JsonConvert.DeserializeObject<Cart>(cart_cookie);
             }
-            set 
+            set
             {
                 ReplaceCookie(_httpContextAccessor.HttpContext.Response.Cookies, JsonConvert.SerializeObject(value));
             }
-        }
-
-
-        private void ReplaceCookie(IResponseCookies cookies, string cookie)
-        {
-            cookies.Delete(_cartName);
-            cookies.Append(_cartName, cookie, new CookieOptions { Expires = DateTime.Now.AddDays(15) });
-        }
-        public CookieCartService(IProductData productData, IHttpContextAccessor httpContextAccessor)
-        {
-            _productData = productData;
-            _httpContextAccessor = httpContextAccessor;
-
-            var user = httpContextAccessor.HttpContext.User;
-            var user_name = user.Identity.IsAuthenticated ? user.Identity.Name : null;
-            _cartName = $"cart[{user_name}]";
         }
 
 
