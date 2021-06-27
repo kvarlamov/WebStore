@@ -7,6 +7,6 @@ namespace WebStore.Services.Product
 {
     public interface ICartStore
     {
-        public Cart Cart { get; set; }
+        Cart Cart { get; set; }
     }
 }
