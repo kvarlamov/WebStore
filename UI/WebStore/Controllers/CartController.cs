@@ -9,10 +9,12 @@ namespace WebStore.Controllers
     public class CartController : Controller
     {
         private readonly ICartService _CartService;
+        private readonly IOrderService _OrderService;
 
-        public CartController(ICartService CartService)
+        public CartController(ICartService CartService, IOrderService OrderService)
         {
             _CartService = CartService;
+            _OrderService = OrderService;
         }
 
         public IActionResult Details() => View(new DetailsViewModel
@@ -46,7 +48,7 @@ namespace WebStore.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult CheckOut(OrderViewModel model, [FromServices] IOrderService OrderService)
+        public IActionResult CheckOut(OrderViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -70,7 +72,7 @@ namespace WebStore.Controllers
                 .ToList()
             };
 
-            var order = OrderService.CreateOrder(createOrderModel, User.Identity.Name);
+            var order = _OrderService.CreateOrder(createOrderModel, User.Identity.Name);
 
             _CartService.RemoveAll();
 
