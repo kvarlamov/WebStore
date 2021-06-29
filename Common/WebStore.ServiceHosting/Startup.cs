@@ -31,7 +31,32 @@ namespace WebStore.ServiceHosting
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddTransient<WebStoreContextInitializer>();
+            services.AddDbContext<WebStoreContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddTransient<WebStoreContextInitializer>();
+
+            services.AddIdentity<User, Role>()
+               .AddEntityFrameworkStores<WebStoreContext>()
+               .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(
+                opt =>
+                {
+                    opt.Password.RequiredLength = 3;
+                    opt.Password.RequireDigit = false;
+                    opt.Password.RequireUppercase = false;
+                    opt.Password.RequireLowercase = false;
+                    opt.Password.RequireNonAlphanumeric = false;
+                    opt.Password.RequiredUniqueChars = 3;
+
+                    opt.Lockout.AllowedForNewUsers = true;
+                    opt.Lockout.MaxFailedAccessAttempts = 10;
+                    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+
+                    //opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABC123";
+                    opt.User.RequireUniqueEmail = false; // Грабли - на этапе отладки при попытке регистрации двух пользователей без email
+                });
 
             services.AddSwaggerGen(
                 opt =>
@@ -39,15 +64,7 @@ namespace WebStore.ServiceHosting
                     opt.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "WebStore.API", Version = "v1" });
                     opt.IncludeXmlComments("WebStore.ServiceHosting.xml");
                     opt.IncludeXmlComments(@"C:\IT\Practice\WebStore\Common\WebStore.ServiceHosting\bin\Debug\netcoreapp2.2\WebStore.Domain.xml");
-                });
-
-            services.AddDbContext<WebStoreContext>(opt =>
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<User, IdentityRole>(options =>
-            {
-                //here you can configure cookies
-            });
+                });            
 
             services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             services.AddScoped<IProductData, SqlProductData>();
@@ -57,11 +74,11 @@ namespace WebStore.ServiceHosting
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory log/*, WebStoreContextInitializer db*/)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory log, WebStoreContextInitializer db)
         {
             log.AddLog4Net();
 
-            //db.InitializeAsync().Wait();
+            db.InitializeAsync().Wait();
 
             if (env.IsDevelopment())
             {
