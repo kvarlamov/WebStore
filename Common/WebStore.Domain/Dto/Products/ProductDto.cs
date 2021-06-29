@@ -35,5 +35,10 @@ namespace WebStore.Domain.Dto.Products
         /// Price
         /// </summary>
         public decimal Price { get; set; }
+
+        /// <summary>
+        /// Product Section
+        /// </summary>
+        public SectionDto Section { get; set; }
     }
 }

@@ -19,4 +19,8 @@
     <ProjectReference Include="..\..\UI\WebStore\WebStore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Components" />
+  </ItemGroup>
+
 </Project>

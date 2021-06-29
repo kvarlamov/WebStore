@@ -39,6 +39,11 @@
             Price
             </summary>
         </member>
+        <member name="P:WebStore.Domain.Dto.Products.ProductDto.Section">
+            <summary>
+            Product Section
+            </summary>
+        </member>
         <member name="T:WebStore.Domain.Entities.Base.BaseEntity">
             <summary>Сущность</summary>
         </member>

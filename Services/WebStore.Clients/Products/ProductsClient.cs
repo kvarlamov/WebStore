@@ -15,7 +15,10 @@ namespace WebStore.Clients.Products
 
         }
 
+        public Section GetSectionById(int id) => Get<Section>($"{_ServiceAddress}/sections/{id}");
+
         public IEnumerable<Brand> GetBrands() => Get<List<Brand>>($"{_ServiceAddress}/brands");
+        public Brand GetBrandById(int id) => Get<Brand>($"{_ServiceAddress}/brands/{id}");
 
         public ProductDto GetProductById(int id) => Get<ProductDto>($"{_ServiceAddress}/{id}");
 
