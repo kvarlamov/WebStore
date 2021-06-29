@@ -13,10 +13,24 @@ namespace WebStore.Components
         public SectionsViewComponent(IProductData ProductData) => _ProductData = ProductData;
 
         //public async Task<IViewComponentResult> InvokeAsync() => View();
-        public IViewComponentResult Invoke() => View(GetSections());
-
-        private IEnumerable<SectionViewModel> GetSections()
+        public IViewComponentResult Invoke(string SectionId)
         {
+            var sectionId = int.TryParse(SectionId, out var id) ? id : (int?) null;
+
+            var sections = GetSections(sectionId, out var parentSectionId);
+            
+            return View(new SectionCompleteViewModel
+            {
+                Sections = sections,
+                CurrentSectionId = sectionId,
+                CurrentParentSection = parentSectionId
+            });
+        }
+
+        private IEnumerable<SectionViewModel> GetSections(int? sectionId, out int? parentSectionId)
+        {
+            parentSectionId = null;
+            
             var sections = _ProductData.GetSections();
 
             var parent_sections = sections.Where(section => section.ParentId is null).ToArray();
