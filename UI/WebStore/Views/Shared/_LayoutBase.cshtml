@@ -25,8 +25,20 @@
 
     <partial name="Partial/_Footer" />
 
-    <partial name="Partial/_Scripts" />
+<partial name="Partial/_Scripts" />
 
-    @RenderSection("Scripts", false)
+<script src="~/js/Cart/CartLogic.js" asp-append-version="true"></script> 
+@* asp-append-version - add hash control summ to script for cashe purposes *@
+<script>
+    $(function()
+    {
+        Cart.init({
+            getCartViewLink: "@Url.Action("GetCartView","Cart")",
+            addToCartLink: "@Url.Action("AddToCart","Cart")"
+        })
+    })
+</script>
+
+@RenderSection("Scripts", false)
 </body>
 </html>

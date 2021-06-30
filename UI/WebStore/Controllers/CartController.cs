@@ -84,5 +84,16 @@ namespace WebStore.Controllers
             ViewBag.OrderId = id;
             return View();
         }
+
+        #region API
+
+        public IActionResult GetCartView() => ViewComponent("Cart");
+        public IActionResult ApiToCartApi(int id)
+        {
+            _CartService.AddToCart(id);
+            return Json(new {id, message = $"Product with id {id} succesfully added to cart"});
+        }
+
+        #endregion
     }
 }
