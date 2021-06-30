@@ -3,8 +3,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using WebStore.Controllers;
 using WebStore.Domain.Dto.Products;
 using WebStore.Domain.Entities;
@@ -43,8 +45,10 @@ namespace WebStore.Tests.Controllers
                         Name = $"Brand of item {id}"
                     }
                 });
+            
+            var configurationMock = new Mock<IConfiguration>();
 
-            var controller = new CatalogController(productDataMock.Object);
+            var controller = new CatalogController(productDataMock.Object, configurationMock.Object);
 
             #endregion
 
@@ -74,8 +78,10 @@ namespace WebStore.Tests.Controllers
             productDataMock
                 .Setup(p => p.GetProductById(It.IsAny<int>()))
                 .Returns(default(ProductDto));
+            
+            var configurationMock = new Mock<IConfiguration>();
 
-            var controller = new CatalogController(productDataMock.Object);
+            var controller = new CatalogController(productDataMock.Object, configurationMock.Object);
 
             var result = controller.Details(1);
 
@@ -123,8 +129,10 @@ namespace WebStore.Tests.Controllers
                     Products = products,
                     TotalCount = products.Length
                 });
+            
+            var configurationMock = new Mock<IConfiguration>();
 
-            var controller = new CatalogController(productDataMock.Object);
+            var controller = new CatalogController(productDataMock.Object, configurationMock.Object);
 
             const int expectedSectionId = 1;
             const int expectedBrandId = 5;

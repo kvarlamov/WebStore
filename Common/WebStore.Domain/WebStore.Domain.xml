@@ -4,6 +4,21 @@
         <name>WebStore.Domain</name>
     </assembly>
     <members>
+        <member name="T:WebStore.Domain.Dto.Products.PagedProductDto">
+            <summary>
+            Single page of products from catalog
+            </summary>
+        </member>
+        <member name="P:WebStore.Domain.Dto.Products.PagedProductDto.Products">
+            <summary>
+            Products on page
+            </summary>
+        </member>
+        <member name="P:WebStore.Domain.Dto.Products.PagedProductDto.TotalCount">
+            <summary>
+            Total amount of products
+            </summary>
+        </member>
         <member name="T:WebStore.Domain.Dto.Products.ProductDto">
             <summary>
             Information about product
