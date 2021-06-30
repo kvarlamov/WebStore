@@ -50,7 +50,7 @@ namespace WebStore.ServiceHosting.Controllers
         /// <param name="Filter">criteria of products find</param>
         /// <returns>List of products with filtration</returns>
         [HttpPost, ActionName("Post")]
-        public IEnumerable<ProductDto> GetProducts(ProductFilter Filter = null) => _productData.GetProducts(Filter);
+        public PagedProductDto GetProducts(ProductFilter Filter = null) => _productData.GetProducts(Filter);
 
 
         /// <summary>

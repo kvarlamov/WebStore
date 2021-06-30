@@ -22,9 +22,9 @@ namespace WebStore.Clients.Products
 
         public ProductDto GetProductById(int id) => Get<ProductDto>($"{_ServiceAddress}/{id}");
 
-        public IEnumerable<ProductDto> GetProducts(ProductFilter Filter = null) => Post(_ServiceAddress, Filter)
+        public PagedProductDto GetProducts(ProductFilter Filter = null) => Post(_ServiceAddress, Filter)
             .Content
-            .ReadAsAsync<List<ProductDto>>()
+            .ReadAsAsync<PagedProductDto>()
             .Result;
 
         public IEnumerable<Section> GetSections() => Get<List<Section>>($"{_ServiceAddress}/sections");

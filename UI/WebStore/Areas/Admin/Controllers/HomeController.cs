@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebStore.Domain.Entities;
 using WebStore.Domain.Entities.Identity;
 using WebStore.Interfaces.Services;
 
@@ -24,7 +25,7 @@ namespace WebStore.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult ProductList() => View(_ProductData.GetProducts());
+        public IActionResult ProductList() => View(_ProductData.GetProducts(new ProductFilter()).Products);
 
         public IActionResult Edit(int? id) => View();
 

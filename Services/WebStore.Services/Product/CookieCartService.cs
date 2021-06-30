@@ -123,7 +123,7 @@ namespace WebStore.Services.Product
                 Ids = Cart.Items.Select(item => item.ProductId).ToList()
             });
 
-            var product_view_models = products.Select(p => new ProductViewModel
+            var product_view_models = products.Products.Select(p => new ProductViewModel
             {
                 Id = p.Id,
                 Name = p.Name,
