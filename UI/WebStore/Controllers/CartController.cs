@@ -88,10 +88,28 @@ namespace WebStore.Controllers
         #region API
 
         public IActionResult GetCartView() => ViewComponent("Cart");
-        public IActionResult ApiToCartApi(int id)
+        public IActionResult AddToCartApi(int id)
         {
             _CartService.AddToCart(id);
             return Json(new {id, message = $"Product with id {id} succesfully added to cart"});
+        }
+
+        public IActionResult DecrementFromCartApi(int id)
+        {
+            _CartService.DecrementFromCart(id);
+            return Json(new {id, message = $"Product with id {id} succesfully decremented"});
+        }
+        
+        public IActionResult RemoveFromCartApi(int id)
+        {
+            _CartService.RemoveFromCart(id);
+            return Json(new {id, message = $"Product with id {id} succesfully removed from cart"});
+        }
+
+        public IActionResult ClearCartApi()
+        {
+            _CartService.RemoveAll();
+            return Json(new {message = "Cart was cleared"});
         }
 
         #endregion

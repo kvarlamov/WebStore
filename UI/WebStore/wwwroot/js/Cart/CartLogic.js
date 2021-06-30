@@ -1,17 +1,19 @@
 ﻿Cart = {
     _properties: {
         getCartViewLink: "",
-        addToCartLink: ""
+        addToCartLink: "",
+        removeFromCartLink: "",
     },
     
     init: function(properties) {
         $.extend(Cart._properties, properties);
         
-        Cart.initAddToCart();
+        Cart.initEvents();
     },
     
-    initAddToCart: function (){
+    initEvents: function (){
         $(".add-to-cart").click(Cart.addToCart);
+        $(".cart_quantity_delete").on("click", Cart.removeFromCart);
     },
     
     addToCart: function(event) {
@@ -46,5 +48,31 @@
             .fail(function() {
                 console.log("refreshCartView failed")
             })
+    },
+    removeFromCart: function(e){
+        e.preventDefault();
+        
+        const button = $(this);
+        const id = button.data("id");
+        $.get(Cart._properties.removeFromCartLink + "/" + id)
+            .done(function(){
+                button.closest("tr").remove()
+                Cart.refreshTotalPrice()
+            })
+            .fail(function() {console.log("removeFromCart failed")})
+     },
+
+    refreshTotalPrice: function(){
+        let total = 0
+        
+        $(".cart_total_price").each(
+            function(){
+                const price = parseFloat($(this).data("price"))
+                total += price
+            }
+        )
+        
+        const value = total.toLocaleString("ru-Ru", {style:"currency", currency: "RUB"})
+        $("#total-order-sum").html(value)
     }
 }
