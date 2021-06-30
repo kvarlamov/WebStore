@@ -33,14 +33,14 @@
                                 <h4><a asp-controller="Catalog" asp-action="Details" asp-route-id="@product.Id">@product.Name</a></h4>
                                 <p>Web ID: @product.Id.ToString("00000")</p>
                             </td>
-                            <td class="cart_price">
+                            <td class="cart_price" data-price="@product.Price">
                                 <p>@product.Price.ToString("C")</p>
                             </td>
                             <td class="cart_quantity">
                                 <div class="cart_quantity_button">
-                                    <a class="cart_quantity_up" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id"> + </a>
+                                    <a class="cart_quantity_up" data-id="@product.Id" href="#"> + </a>
                                     <input class="cart_quantity_input" type="text" name="quantity" value="@quantity" autocomplete="off" size="2">
-                                    <a class="cart_quantity_down" asp-action="DecrementFromCart" asp-route-id="@product.Id"> - </a>
+                                    <a class="cart_quantity_down" data-id="@product.Id" href="#"> - </a>
                                 </div>
                             </td>
                             <td class="cart_total">
