@@ -15,15 +15,21 @@
             </div>
 
             <div class="col-sm-9 padding-right">
-                <partial name="Partial/_FeaturesItem" model="@Model.Products"/>
+                <div id="items-container">
+                    <partial name="Partial/_FeaturesItem" model="@Model.Products"/>    
+                </div>
+                
                 <paging page-model="@Model.PageViewModel"
                         page-action="Shop"
                         page-url-SectionId="@Model.SectionId"
                         page-url-BrandId="@Model.BrandId">
-                    
+
                 </paging>
             </div>
         </div>
     </div>
 </section>
 
+@section Scripts{
+    
+}

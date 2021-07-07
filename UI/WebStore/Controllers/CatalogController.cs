@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using WebStore.Domain.Entities;
@@ -12,6 +13,7 @@ namespace WebStore.Controllers
     {
         private readonly IProductData _ProductData;
         private readonly IConfiguration _Configuration;
+        private readonly string _PageSize = "PageSize";
 
         public CatalogController(IProductData productData, IConfiguration configuration)
         {
@@ -21,7 +23,7 @@ namespace WebStore.Controllers
 
         public IActionResult Shop(int? sectionId, int? brandId, int page = 1)
         {
-            var pageSize = int.Parse(_Configuration["PageSize"]);
+            var pageSize = int.Parse(_Configuration[_PageSize]);
             
             var products = _ProductData.GetProducts(new ProductFilter
             {
@@ -72,6 +74,33 @@ namespace WebStore.Controllers
                 ImageUrl = product.ImageUrl,
                 Order = product.Order,
                 Brand = product.Brand?.Name
+            });
+        }
+
+        public IActionResult GetFilteredItems(int? sectionId, int? brandId, int page = 1)
+        {
+            var products = GetProducts(sectionId, brandId, page);
+            return PartialView("Partial/_FeaturesItem", products);
+        }
+
+        private IEnumerable<ProductViewModel> GetProducts(int? sectionId, int? brandId, int page)
+        {
+            var productModel = _ProductData.GetProducts(new ProductFilter
+            {
+                SectionId = sectionId,
+                BrandId = brandId,
+                Page = page,
+                PageSize = int.Parse(_Configuration[_PageSize])
+            });
+
+            return productModel.Products.Select(p => new ProductViewModel
+            {
+                Id= p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Order = p.Order,
+                ImageUrl = p.ImageUrl,
+                Brand = p.Brand?.Name ?? string.Empty
             });
         }
     }
