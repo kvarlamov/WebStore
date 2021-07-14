@@ -1,0 +1,87 @@
+﻿@using WebStore.Domain.Entities
+@{
+    ViewData["Title"] = "Unobtrusive Ajax";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<div class="row">
+    <div class="col-sm-4">
+        <h4>ServerSide rendering</h4>
+        
+        <a href="#" class="btn btn-default"
+           data-ajax="true"
+           data-ajax-url="@Url.Action("GetTestView","AjaxTest")"
+           data-ajax-update="#panel-server"
+           data-ajax-loading="#spinner-server"
+           >
+            Loading
+        </a>
+        <span id="spinner-server" style="display: none">
+            <i class="fa fa-spinner fa-spin"></i>            
+        </span>
+        <div id="panel-server">
+            
+        </div>
+        
+    </div>
+    
+    <div class="col-sm-4">
+        <h4>ClientSide rendering</h4>
+        <a href="#" class="btn btn-default"
+           data-ajax="true"
+          data-ajax-url="@Url.Action("GetJson","AjaxTest", new{id=123, msg = "Hello World"})"
+          data-ajax-success="OnDataLoaded"
+          data-ajax-loading="#spinner-client"
+        >
+            Loading
+        </a>
+        <span id="spinner-client" style="display: none">
+            <i class="fa fa-spinner fa-spin"></i>            
+        </span>
+        <div id="panel-client">
+                    
+        </div>
+        
+    </div>
+    
+    <div class="col-sm-4">
+        <h4>JavaScript rendering</h4>
+        <a href="#" class="btn btn-default" id="load-data-btn">
+            Loading
+        </a>
+        <span id="spinner-js" style="display: none">
+            <i class="fa fa-spinner fa-spin"></i>            
+        </span>
+        <div id="panel-js">
+              
+        </div>
+        
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.min.js"></script>
+    <script >
+        OnDataLoaded = data => {
+            const host = $("#panel-client");
+            host.empty();
+            host.append("msg: " + data.message);
+            host.append("<br/>time: " + data.serverTime);
+        }
+    </script>
+    <script>
+        $("#load-data-btn").on("click", e => {
+           e.preventDefault()
+           console.log("sending data to server")
+           
+           $.get("@Url.Action("GetJson")", {id: 321, msg: "World? Hello..."})
+            .done(data => {
+                    const host = $("#panel-js")
+                    host.empty()
+                    host.append(data.message)
+                    host.append("<br/>time: " + data.serverTime);
+                }); 
+        });
+    </script>
+}
