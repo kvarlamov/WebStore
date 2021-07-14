@@ -21,9 +21,9 @@ namespace WebStore.Controllers
             _Logger = Logger;
         }
 
-        public async Task<IActionResult> IsNameFree(string UserName)
+        public async Task<IActionResult> IsNameFree(string userName)
         {
-            var user = await _UserManager.FindByNameAsync(UserName);
+            var user = await _UserManager.FindByNameAsync(userName);
             if(user != null)
             {
                 return Json("Пользователь с таким именем уже существует");
@@ -32,6 +32,8 @@ namespace WebStore.Controllers
         }
 
         public IActionResult Register() => View(new RegisterUserViewModel());
+
+        
 
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterUserViewModel model)
