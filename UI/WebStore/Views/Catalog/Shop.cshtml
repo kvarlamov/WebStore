@@ -31,5 +31,13 @@
 </section>
 
 @section Scripts{
-    
+    <script src="~/lib/jquery-loading-overlay/loadingoverlay.min.js"></script>
+        <script src="~/js/Shop/ProductItems.js" asp-append-version="true"></script>
+        <script>
+            $(function() {
+                ProductItems.init({
+                    getUrl: "@Url.Action("GetFilteredItems", "Catalog")"
+                });
+            })
+        </script>
 }

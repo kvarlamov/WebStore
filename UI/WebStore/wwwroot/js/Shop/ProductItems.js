@@ -5,7 +5,7 @@
     
     init: properties => {
         $.extend(ProductItems._properties, properties);
-        $(".pagination li a").on("click", clickOnPage)
+        $(".pagination li a").on("click", ProductItems.clickOnPage)
     },
 
     clickOnPage: function(e) {
@@ -15,12 +15,12 @@
         if (button.prop("href").length > 0) {
             const page = button.data("page")
             const container = $("#items-container")
-            container.LoadingOverlaySetup("show")
+            container.LoadingOverlay("show")
             const data = button.data()
             let query = ""
             for (let key in data){
                 if(data.hasOwnProperty(key)){
-                    query += `${key}=${data[key]}$`
+                    query += `${key}=${data[key]}`;
                 }
             }
             
