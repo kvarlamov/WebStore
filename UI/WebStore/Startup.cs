@@ -15,6 +15,7 @@ using WebStore.Interfaces.Services;
 using WebStore.Services.Product;
 using WebStore.Logging;
 using Microsoft.Extensions.Logging;
+using WebStore.Hubs;
 using WebStore.Infrastructure.Middleware;
 
 namespace WebStore
@@ -27,6 +28,8 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+            
             services.AddScoped<IValuesService, ValuesClient>();
 
             services.AddSingleton<IEmployeesData, EmployeesClient>(); 
@@ -96,6 +99,8 @@ namespace WebStore
             //app.UseMiddleware(new ErrorHandlingMiddleware(...)) alternative way to register middleware
 
             app.UseSession();
+
+            app.UseSignalR(route => route.MapHub<InformationHub>("/Info"));
 
             app.UseMvc(routes =>
             {
